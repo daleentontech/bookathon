@@ -1,0 +1,54 @@
+version: '3.7'
+services:
+  client_api:
+    build:
+      context: ./client_api
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py migrate &&
+            python manage.py runserver 0.0.0.0:5000"
+    ports:
+      - "8002:5000"
+    volumes:
+      - ./client_api:/client_api
+    depends_on:
+      - db_client_api
+
+  db_client_api:
+    image: postgres
+    restart: always
+    container_name: postgres_client_api
+    environment:
+      - POSTGRES_DB=client
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - ./client_api/postgres-data-client-api:/var/lib/postgres/data
+    ports:
+      - "5433:5432"
+
+  admin_api:
+    build:
+      context: ./admin_api
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py migrate &&
+            python manage.py runserver 0.0.0.0:9000"
+    ports:
+      - "8000:9000"
+    volumes:
+      - ./admin_api:/admin_api
+    depends_on:
+      - db_admin_api
+
+  db_admin_api:
+    image: mysql:5.7
+    restart: always
+    container_name: mysql_admin_api
+    environment:
+      - MYSQL_DATABASE=admin
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "33066:3306"
+    volumes:
+      - ./admin_api/mysql-data-admin-api:/var/lib/admin_mysql
