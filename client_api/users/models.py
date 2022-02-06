@@ -35,3 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
     USERNAME_FIELD = 'email'
+
+    class Meta:
+        verbose_name = 'User'
+        app_label = "users"
