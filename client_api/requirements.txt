@@ -3,3 +3,4 @@ djangorestframework
 pika==1.2.0
 requests==2.22.0
 psycopg2==2.8.5
+retry

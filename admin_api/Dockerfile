@@ -1,6 +1,6 @@
 FROM python:3
 
-ENV PYTHONBUFFERED 1
+ENV PYTHONUNBUFFERED 1
 
 COPY ./requirements.txt /admin_api/requirements.txt
 RUN pip install --no-cache-dir -r ./admin_api/requirements.txt

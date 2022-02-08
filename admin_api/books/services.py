@@ -13,7 +13,7 @@ class BookService(object):
         return Book.objects.filter(id=book_id).first()
 
     @staticmethod
-    def retrive_all_books():
+    def retrieve_all_books():
         """Retrieve all books"""
         return Book.objects.all()
 
@@ -29,3 +29,13 @@ class BookService(object):
     def retrieve_borrowed_books():
         """Retrieve all borrowed books"""
         return Book.objects.filter(is_borrowed=True)
+
+    @staticmethod
+    def create_book(**kwargs):
+        """Create a book"""
+        try:
+            book = Book.objects.create(**kwargs)
+        except ServiceException as e:
+            raise ServiceException(e.message)
+        return book
+

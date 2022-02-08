@@ -5,10 +5,21 @@ services:
       context: ./client_api
       dockerfile: Dockerfile
     command: >
-      sh -c "python manage.py wait_for_db && python manage.py migrate &&
+      sh -c "python manage.py wait_for_db && python manage.py makemigrations && python manage.py migrate &&
             python manage.py runserver 0.0.0.0:5000"
     ports:
       - "8002:5000"
+    volumes:
+      - ./client_api:/client_api
+    depends_on:
+      - db_client_api
+
+  client_api_queue:
+    build:
+      context: ./client_api
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python consumer.py"
     volumes:
       - ./client_api:/client_api
     depends_on:
@@ -32,10 +43,21 @@ services:
       context: ./admin_api
       dockerfile: Dockerfile
     command: >
-      sh -c "python manage.py wait_for_db && python manage.py migrate &&
+      sh -c "python manage.py wait_for_db && python manage.py makemigrations && python manage.py migrate &&
             python manage.py runserver 0.0.0.0:9000"
     ports:
       - "8000:9000"
+    volumes:
+      - ./admin_api:/admin_api
+    depends_on:
+      - db_admin_api
+
+  admin_api_queue:
+    build:
+      context: ./admin_api
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python consumer.py"
     volumes:
       - ./admin_api:/admin_api
     depends_on:

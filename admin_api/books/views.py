@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
+from .producer import publish
 from .serializers import BookSerializer, BookCreateSerializer
 from rest_framework import mixins
 from rest_framework import permissions
@@ -33,20 +34,15 @@ class BooksViewSet(
         This endpoint is used to create a new book
         """
         serializer = BookCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # def retrieve(self, request, *args, **kwargs):
-    #     """
-    #     This endpoint is used to retrieve a book
-    #     """
-    #     book = BookService.get_book(kwargs.get('pk'))
-    #     if book is None:
-    #         return Response("Book does not exist", status=status.HTTP_404_NOT_FOUND)
-    #     serializer = BookSerializer(book)
-    #     return Response(serializer.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors)
+        data = serializer.validated_data
+        try:
+            book = BookService.create_book(**data)
+        except ServiceException as e:
+            return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
+        serializer = BookSerializer(book)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, pk=None):
         try:
@@ -66,4 +62,8 @@ class BooksViewSet(
         except ServiceException as e:
             Response(e.message, status=status.HTTP_400_BAD_REQUEST)
         serializer = BookSerializer(books, many=True)
+        try:
+            publish()
+        except ServiceException as e:
+            print(e.message)
         return Response(serializer.data)
