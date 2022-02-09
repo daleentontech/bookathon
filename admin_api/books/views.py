@@ -26,7 +26,7 @@ class BooksViewSet(
     permission_classes = (permissions.AllowAny,)
 
     def get_queryset(self):
-        queryset = BookService.retrive_all_books()
+        queryset = BookService.retrieve_all_books()
         return queryset
 
     def create(self, request, *args, **kwargs):
@@ -42,6 +42,7 @@ class BooksViewSet(
         except ServiceException as e:
             return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
         serializer = BookSerializer(book)
+        publish("book_created", serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, pk=None):
@@ -49,6 +50,7 @@ class BooksViewSet(
             BookService.delete_book(pk)
         except ServiceException as e:
             return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
+        publish("book_deleted", pk)
         return Response("Book successfully deleted", status=status.HTTP_200_OK)
 
     @action(methods=["get"], detail=False, url_path="borrowed", url_name="borrowed")
@@ -62,8 +64,4 @@ class BooksViewSet(
         except ServiceException as e:
             Response(e.message, status=status.HTTP_400_BAD_REQUEST)
         serializer = BookSerializer(books, many=True)
-        try:
-            publish()
-        except ServiceException as e:
-            print(e.message)
         return Response(serializer.data)

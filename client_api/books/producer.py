@@ -12,7 +12,7 @@ def publish(method_frame, body):
     properties = pika.BasicProperties(method_frame)
     channel.basic_publish(
         exchange='',
-        routing_key='client',
+        routing_key='admin',
         body=json.dumps(body).encode('utf-8'),
         properties=properties
     )

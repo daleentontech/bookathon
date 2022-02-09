@@ -18,12 +18,14 @@ services:
     build:
       context: ./client_api
       dockerfile: Dockerfile
+    restart: always
     command: >
       sh -c "python consumer.py"
     volumes:
       - ./client_api:/client_api
     depends_on:
       - db_client_api
+      - client_api
 
   db_client_api:
     image: postgres
@@ -56,12 +58,14 @@ services:
     build:
       context: ./admin_api
       dockerfile: Dockerfile
+    restart: always
     command: >
       sh -c "python consumer.py"
     volumes:
       - ./admin_api:/admin_api
     depends_on:
       - db_admin_api
+      - admin_api
 
   db_admin_api:
     image: mysql:5.7
