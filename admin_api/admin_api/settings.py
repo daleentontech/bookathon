@@ -70,8 +70,7 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = 'admin_api.asgi.application'
-#WSGI_APPLICATION = 'admin_api.wsgi.application'
+WSGI_APPLICATION = 'admin_api.wsgi.application'
 
 
 # Database

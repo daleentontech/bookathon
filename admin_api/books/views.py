@@ -2,13 +2,13 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 
 from .producer import publish
-from .serializers import BookSerializer, BookCreateSerializer
+from .serializers import BookSerializer, BookCreateSerializer, BookUserSerializer, UserSerializer
 from rest_framework import mixins
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework import viewsets
 
-from .services import BookService
+from .services import BookService, UserService
 from .exceptions import ServiceException
 
 
@@ -64,4 +64,45 @@ class BooksViewSet(
         except ServiceException as e:
             Response(e.message, status=status.HTTP_400_BAD_REQUEST)
         serializer = BookSerializer(books, many=True)
+        return Response(serializer.data)
+
+    @action(
+        methods=['get'],
+        detail=False,
+        url_path='borrowers',
+        url_name='borrowers',
+    )
+    def borrowers(self, request):
+        """
+        Get all borrowers
+        """
+        try:
+            borrowers = BookService.get_borrowers()
+        except ServiceException as e:
+            return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
+        serializer = BookUserSerializer(borrowers, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class UserViewSet(
+        mixins.CreateModelMixin,
+        mixins.ListModelMixin,
+        mixins.DestroyModelMixin,
+        viewsets.GenericViewSet,
+        ):
+
+    serializer_class = UserSerializer
+    permission_classes = (permissions.AllowAny,)
+
+    def get_queryset(self):
+        queryset = UserService.retrieve_all_users()
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        """"""
+        try:
+            queryset = UserService.retrieve_all_users()
+        except ServiceException as e:
+            return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
+        serializer = UserSerializer(queryset, many=True)
         return Response(serializer.data)

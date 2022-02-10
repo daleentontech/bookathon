@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.utils import timezone
 from rest_framework import serializers
-from .models import Book
+from .models import Book, BookUser, User
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -43,3 +43,30 @@ class BookCreateSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         pass
+
+
+class BookUserSerializer(serializers.Serializer):
+    book = serializers.SerializerMethodField()
+    book_user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = BookUser
+        fields = '__all__'
+
+    def get_book(self, obj):
+        book_id = obj.book_id
+        return Book.objects.filter(id=book_id).first().title
+
+    def get_book_user(self, obj):
+        book_user_id = obj.user_id
+        if book_user_id:
+            user = User.objects.filter(id=book_user_id).first()
+            if user is None:
+                return "Anonymous"
+            return user.email
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'

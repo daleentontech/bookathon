@@ -71,8 +71,7 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = 'client_api.asgi.application'
-# WSGI_APPLICATION = 'client_api.wsgi.application'
+WSGI_APPLICATION = 'client_api.wsgi.application'
 
 
 # Database
@@ -106,6 +105,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+   'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework.authentication.TokenAuthentication',
+   ),
+   # 'DEFAULT_PERMISSION_CLASSES': (
+   #      'rest_framework.permissions.IsAdminUser'
+   # ),
+}
 
 
 # Internationalization

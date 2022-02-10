@@ -1,3 +1,4 @@
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
@@ -20,7 +21,6 @@ class BooksViewSet(
     """
 
     serializer_class = BookSerializer
-    permission_classes = (permissions.AllowAny,)
 
     def get_queryset(self, **filters):
         """Get all available books"""
@@ -54,9 +54,21 @@ class BooksViewSet(
         serializer = self.get_serializer(book)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
-    @action(methods=['post'], detail=True, url_path='borrow', url_name='borrow')
+    @action(
+        methods=['post'],
+        detail=True,
+        url_path='borrow',
+        url_name='borrow',
+        authentication_classes=[TokenAuthentication],
+        permission_classes=[permissions.IsAuthenticated]
+    )
     def borrow(self, request, pk=None):
-        """Borrow a book by ID"""
+        """
+        Borrow a book by ID
+
+        This endpoint is authenticated and requires a valid token
+        This is to ensure that the borrower is a real user
+        """
         serializer = BookBorrowSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -67,6 +79,12 @@ class BooksViewSet(
         except ServiceException as e:
             return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
         serializer = self.get_serializer(book)
-        data = {"pk": pk, "is_borrowed": book.is_borrowed, "borrowed_on": book.borrowed_on}
-        print(data)
+        data = {
+            "pk": pk,
+            "is_borrowed": book.is_borrowed,
+            "borrowed_on": book.borrowed_on.isoformat(),
+            "borrower": request.user.id,
+            "days_to_borrow": data.get("days_to_borrow")
+        }
+        publish("book_borrowed", data)
         return Response(data=serializer.data, status=status.HTTP_200_OK)

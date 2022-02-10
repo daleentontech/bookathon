@@ -1,5 +1,5 @@
 from .exceptions import ServiceException
-from .models import Book
+from .models import Book, BookUser, User
 
 
 class BookService(object):
@@ -39,3 +39,25 @@ class BookService(object):
             raise ServiceException(e.message)
         return book
 
+    @staticmethod
+    def get_borrowers():
+        """Get all borrowers"""
+        return BookUser.objects.all()
+
+
+# User Service
+
+class UserService(object):
+    """
+    All books related logic are here
+    """
+
+    @staticmethod
+    def get_user(user_id):
+        """Fetch a book by ID"""
+        return User.objects.filter(id=user_id).first()
+
+    @staticmethod
+    def retrieve_all_users():
+        """Retrieve all users"""
+        return User.objects.all()
