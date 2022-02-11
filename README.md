@@ -41,3 +41,22 @@ Follow on questions
 3. What are your ideas on how to handle a shared authentication scheme between these two APIs
 
 
+==================================================================================================================================================================
+
+## Documentation
+
+ Follow this link to view the API [Documention](https://www.example.com)
+ 
+ 
+## Infrastructure
+ - Queue / Message Broker (RabbitMQ)
+ - Django / DRF
+ - Requests
+ - Pika
+
+
+## How to Run
+
+- to start all services run `docker-compose up --build`
+- Admin API --> `127.0.0.1:8000`
+- Client API --> `127.0.0.1:8002`
