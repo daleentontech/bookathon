@@ -45,7 +45,7 @@ Follow on questions
 
 ## Documentation
 
- Follow this link to view the API [Documention](https://documenter.getpostman.com/view/13957299/UVeMH3j7)
+ Follow this link to view the API [Documentation](https://documenter.getpostman.com/view/13957299/UVeMH3j7)
  
  
 ## Infrastructure
