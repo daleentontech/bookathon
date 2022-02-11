@@ -1,4 +1,4 @@
-# bookathon
+# bookathon 1.0
 
 You have been tasked to develop an application to manage books in a library. With your application, users can browse through the catalogue of books and borrow them. You are to build 2 independent API services for this application. 
 
