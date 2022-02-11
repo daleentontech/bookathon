@@ -41,7 +41,7 @@ Follow on questions
 3. What are your ideas on how to handle a shared authentication scheme between these two APIs
 
 
-=======================================================================================================
+=====================================================================
 
 ## Documentation
 
