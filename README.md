@@ -1,4 +1,4 @@
-# bookathon
+# bookathon 1.0
 
 You have been tasked to develop an application to manage books in a library. With your application, users can browse through the catalogue of books and borrow them. You are to build 2 independent API services for this application. 
 
@@ -34,10 +34,22 @@ Requirements
 * Add necessary unit/integration tests.
 
 
-Follow on questions
+=====================================================================
 
-1. Share your git repo for the project
-2. How will you scale this infrastructure in the future when traffic blows up
-3. What are your ideas on how to handle a shared authentication scheme between these two APIs
+## Documentation
+
+ Follow this link to view the API [Documentation](https://documenter.getpostman.com/view/13957299/UVeMH3j7)
+ 
+ 
+## Infrastructure
+ - Queue / Message Broker (RabbitMQ)
+ - Django / DRF
+ - Requests
+ - Pika
 
 
+## How to Run
+
+- to start all services run `docker-compose up --build`
+- Admin API --> `127.0.0.1:8000`
+- Client API --> `127.0.0.1:8002`
