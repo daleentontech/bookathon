@@ -1,7 +1,8 @@
+from distutils.command.config import config
 import pika, json
+from decouple import config
 
-broker_url = 'amqps://rdkynmun:Hx6EA_eC60K0Z954hB4_cdKfluyfuL61@beaver.rmq.cloudamqp.com/rdkynmun'
-
+broker_url = config("BROKER_URL")
 parameters = pika.URLParameters(broker_url)
 connection = pika.BlockingConnection(parameters)
 

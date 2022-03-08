@@ -1,4 +1,5 @@
 import os, pika, json
+from decouple import config
 from dateutil.parser import parse as date_parse
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "admin_api.settings")
@@ -8,7 +9,7 @@ application = get_wsgi_application()
 
 from books.models import Book, BookUser, User
 
-broker_url = 'amqps://rdkynmun:Hx6EA_eC60K0Z954hB4_cdKfluyfuL61@beaver.rmq.cloudamqp.com/rdkynmun'
+broker_url = config("BROKER_URL")
 
 parameters = pika.URLParameters(broker_url)
 connection = pika.BlockingConnection(parameters)

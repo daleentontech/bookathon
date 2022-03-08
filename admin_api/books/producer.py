@@ -1,6 +1,6 @@
 import pika, json
-
-broker_url = 'amqps://rdkynmun:Hx6EA_eC60K0Z954hB4_cdKfluyfuL61@beaver.rmq.cloudamqp.com/rdkynmun'
+from decouple import config
+broker_url = config("BROKER_URL")
 
 parameters = pika.URLParameters(broker_url)
 connection = pika.BlockingConnection(parameters)
