@@ -34,13 +34,6 @@ Requirements
 * Add necessary unit/integration tests.
 
 
-Follow on questions
-
-1. Share your git repo for the project
-2. How will you scale this infrastructure in the future when traffic blows up
-3. What are your ideas on how to handle a shared authentication scheme between these two APIs
-
-
 =====================================================================
 
 ## Documentation
